@@ -7,3 +7,7 @@ Exploring how to apply the concepts of debugging and logging through python
 ## Author
 
 Kelton Zinn
+
+## [pixell_transaction_report.py]
+
+The purpose of the following program will be to ensure software quality by using proper exception handling, and confirming the validity of coding, the accuracy of data. We will be implementing exception blocks, handling blocks and logging/debuggers in order to track the programs quality.

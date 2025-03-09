@@ -5,7 +5,7 @@ Example:
     $ python pixell_transaction_report.py
 """
 
-__author__ = "ACE Faculty"
+__author__ = "Ace Faculty, Kelton Zinn"
 __version__ = "0.11.2024"
 
 import csv
@@ -31,53 +31,58 @@ DATA_FILENAME = "bank_data.csv"
 
 # The absolute path to the data file
 DATA_FILE_PATH = f"{SCRIPT_DIRECTORY}/{DATA_FILENAME}"
+try:
+    with open(DATA_FILE_PATH, 'r') as csv_file:
+        reader = csv.reader(csv_file)
 
-with open(DATA_FILE_PATH, 'r') as csv_file:
-    reader = csv.reader(csv_file)
-
-    # Skip heading line
-    next(reader)
-
-    for transaction in reader:
-        # Reset valid record and error message for each iteration
-        is_valid_record = True
-        error_message = ''
-
-        # Gets the customer ID from the first column
-        customer_id = transaction[0]
         
-        # Gets the transaction type from the second column
-        transaction_type = transaction[1]
+        # Skip heading line
+        next(reader)
 
-        ### VALIDATION 1 ###
+        for transaction in reader:
+                
+            # Reset valid record and error message for each iteration
+            is_valid_record = True
+            error_message = ''
 
-        ### VALIDATION 2 ###
-        # Gets the transaction amount from the third column
-        transaction_amount = float(transaction[2])
-
-        if is_valid_record:
-            # Initialize the customer's account balance if it doesn't 
-            # already exist
-            if customer_id not in customer_data:
-                customer_data[customer_id] = {'balance': 0, 'transactions': []}
-            # Update the customer's account balance based on the 
-            # transaction type
-            elif transaction_type == 'deposit':
-                customer_data[customer_id]['balance'] += transaction_amount
-                transaction_count += 1
-                total_transaction_amount += transaction_amount
-            elif transaction_type == 'withdrawal':
-                customer_data[customer_id]['balance'] += transaction_amount
-                transaction_count += 1
-                total_transaction_amount += transaction_amount
+            # Gets the customer ID from the first column
+            customer_id = transaction[0]
             
-            # Record transactions in the customer's transaction history
-            customer_data[customer_id]['transactions'].append(
-                (transaction_amount, transaction_type)
-                )
-        
-        ### COLLECT INVALID RECORDS ###
-        
+            # Gets the transaction type from the second column
+            transaction_type = transaction[1]
+
+            ### VALIDATION 1 ###
+
+            ### VALIDATION 2 ###
+            # Gets the transaction amount from the third column
+            transaction_amount = float(transaction[2])
+
+            if is_valid_record:
+                # Initialize the customer's account balance if it doesn't 
+                # already exist
+                if customer_id not in customer_data:
+                        customer_data[customer_id] = {'balance': 0, 'transactions': []}
+                # Update the customer's account balance based on the 
+                # transaction type
+                elif transaction_type == 'deposit':
+                    customer_data[customer_id]['balance'] += transaction_amount
+                    transaction_count += 1
+                    total_transaction_amount += transaction_amount
+                elif transaction_type == 'withdrawal':
+                    customer_data[customer_id]['balance'] += transaction_amount
+                    transaction_count += 1
+                    total_transaction_amount += transaction_amount
+                    
+                # Record transactions in the customer's transaction history
+                customer_data[customer_id]['transactions'].append(
+                    (transaction_amount, transaction_type)
+                    )
+                
+            ### COLLECT INVALID RECORDS ###
+#exception to handle file retrieval error            
+except FileNotFoundError:
+    print("The bank data file (bank_data.csv) cannot be found.")
+
 report_title = "PiXELL River Transaction Report"
 print(report_title)
 print('=' * len(report_title))
