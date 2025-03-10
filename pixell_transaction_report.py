@@ -5,11 +5,12 @@ Example:
     $ python pixell_transaction_report.py
 """
 
-__author__ = "Ace Faculty, Kelton Zinn"
+__author__ = "ACE Faculty"
 __version__ = "0.11.2024"
 
 import csv
 import os
+
  
 valid_transaction_types = ['deposit', 'withdraw']
 customer_data = {}
@@ -35,12 +36,10 @@ try:
     with open(DATA_FILE_PATH, 'r') as csv_file:
         reader = csv.reader(csv_file)
 
-        
         # Skip heading line
         next(reader)
 
         for transaction in reader:
-                
             # Reset valid record and error message for each iteration
             is_valid_record = True
             error_message = ''
@@ -51,17 +50,22 @@ try:
             # Gets the transaction type from the second column
             transaction_type = transaction[1]
 
-            ### VALIDATION 1 ###
-
-            ### VALIDATION 2 ###
             # Gets the transaction amount from the third column
             transaction_amount = float(transaction[2])
-
+            
+            ### VALIDATION 1 ###
+            if transaction_type is not valid_transaction_types:
+                raise ValueError(f"The transaction type, \'\'{transaction_type}\'\' is invalid.")
+            
+            ### VALIDATION 2 ###
+            if transaction_amount is not int or float(int):
+                raise TypeError(f"\'\'{transaction_amount}\'\' is an invalid transaction amount.")        
+                
             if is_valid_record:
                 # Initialize the customer's account balance if it doesn't 
                 # already exist
                 if customer_id not in customer_data:
-                        customer_data[customer_id] = {'balance': 0, 'transactions': []}
+                    customer_data[customer_id] = {'balance': 0, 'transactions': []}
                 # Update the customer's account balance based on the 
                 # transaction type
                 elif transaction_type == 'deposit':
@@ -72,17 +76,22 @@ try:
                     customer_data[customer_id]['balance'] += transaction_amount
                     transaction_count += 1
                     total_transaction_amount += transaction_amount
-                    
+        
                 # Record transactions in the customer's transaction history
                 customer_data[customer_id]['transactions'].append(
                     (transaction_amount, transaction_type)
-                    )
-                
-            ### COLLECT INVALID RECORDS ###
-#exception to handle file retrieval error            
-except FileNotFoundError:
-    print("The bank data file (bank_data.csv) cannot be found.")
+                        )
+                       
+except FileNotFoundError as e:
+    print(f"The bank data file ({DATA_FILENAME}) cannot be found.")           
 
+### COLLECT INVALID RECORDS ###
+finally:
+    invalid_records = ([ValueError, TypeError])
+    invalid_records.append([rejected_transactions])
+
+
+               
 report_title = "PiXELL River Transaction Report"
 print(report_title)
 print('=' * len(report_title))
