@@ -15,3 +15,7 @@ The purpose of the following program will be to ensure software quality by using
 ## Code Modification [1]
 
 - Added error handling when the data file is not found within directory in initial code block
+
+## Code Modification [2]
+
+Added code to handle validation and exceptions as well as collecting invalid data
