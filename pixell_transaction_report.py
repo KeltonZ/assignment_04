@@ -12,7 +12,7 @@ import csv
 import os
 
  
-valid_transaction_types = ['deposit', 'withdraw']
+valid_transaction_types = ('deposit', 'withdraw')
 customer_data = {}
 rejected_transactions = []
 transaction_count = 0
@@ -54,11 +54,11 @@ try:
             transaction_amount = float(transaction[2])
             
             ### VALIDATION 1 ###
-            if transaction_type is not valid_transaction_types:
+            if transaction_type not in valid_transaction_types:
                 raise ValueError(f"The transaction type, \'\'{transaction_type}\'\' is invalid.")
             
             ### VALIDATION 2 ###
-            if transaction_amount is not int or float(int):
+            if transaction_amount is str():
                 raise TypeError(f"\'\'{transaction_amount}\'\' is an invalid transaction amount.")        
                 
             if is_valid_record:
